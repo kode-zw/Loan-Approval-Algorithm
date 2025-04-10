@@ -1,0 +1,64 @@
+# prompt: want to develop an algorithmic was to determinhe weather or not to give a customer a loan......now, in the algorithm, I enter Customer Proposed Loan amount, Customoer Proposed Loan Term, Customer Monthly Income ,Customer Monthly expenses, Customer Collateral ,type and value specified.....Constraints, in the algorithm....the algorithm should ask about the income streams, how many are they...then servce questions that firstly ask  the salary, then the name of the other income streams along with their values,the collateral entered should be at least twice the loan value, the intrest rate is 15% per month, no loan can go moere than 3 months, all loan repayements for loans in excess of one moenth, should not exceed 30% of the income......also calculate weekly repayment & daily repayments, we have a 5 day work week and capital and intrestes aee devided into equal, armotised amouunts......the algorithm should allow for manual data entry...the algorithm, also the algorithm should ask the number of collateral items and reserve that number of questions and entries.....if an error happens, the algorithm should not terminate.....if the algorithm is succesful, it should print out the requirements satified by the application....simple intrest....
+
+def loan_approval_algorithm():
+    try:
+        loan_amount = float(input("Enter the proposed loan amount: "))
+        loan_term = int(input("Enter the proposed loan term (in months): "))
+        monthly_income = float(input("Enter your monthly income: "))
+        monthly_expenses = float(input("Enter your monthly expenses: "))
+
+        num_income_streams = int(input("Enter the number of income streams: "))
+        income_streams = []
+        total_income = monthly_income  # Initialize with the primary income
+
+        for i in range(num_income_streams -1):  # Already accounted for the primary income above.
+          income_stream_name = input(f"Enter the name of income stream {i+2}: ")
+          income_stream_value = float(input(f"Enter the value of income stream {income_stream_name}: "))
+          income_streams.append((income_stream_name, income_stream_value))
+          total_income += income_stream_value
+
+        num_collateral_items = int(input("Enter the number of collateral items: "))
+        collateral_value = 0
+        for i in range(num_collateral_items):
+            collateral_type = input(f"Enter the type of collateral item {i + 1}: ")
+            collateral_item_value = float(input(f"Enter the value of collateral item {collateral_type}: "))
+            collateral_value += collateral_item_value
+
+        # Constraints checks
+        if loan_term > 3:
+            print("Error: Loan term cannot exceed 3 months.")
+            return
+
+        if collateral_value < 2 * loan_amount:
+            print("Error: Collateral value must be at least twice the loan amount.")
+            return
+        
+        monthly_interest_rate = 0.15
+        total_interest = loan_amount * monthly_interest_rate * loan_term
+        total_repayment = loan_amount + total_interest
+
+        if loan_term > 1 and (total_repayment / loan_term) / total_income > 0.3:
+            print("Error: Monthly repayments exceed 30% of total income.")
+            return
+        
+        # Calculations
+        weekly_repayment = total_repayment / (loan_term * 4)  # Assuming 4 weeks in a month
+        daily_repayment = weekly_repayment / 5 # 5 day work week
+
+        # Output
+        print("\nLoan Application Approved!\n")
+        print(f"Requirements Satisfied:")
+        print(f"- Loan Amount: ${loan_amount:.2f}")
+        print(f"- Loan Term: {loan_term} months")
+        print(f"- Monthly Interest Rate: {monthly_interest_rate:.2%}")
+        print(f"- Total Repayment: ${total_repayment:.2f}")
+        print(f"- Weekly Repayment: ${weekly_repayment:.2f}")
+        print(f"- Daily Repayment: ${daily_repayment:.2f}")
+
+    except ValueError:
+        print("Invalid input. Please enter numeric values.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+loan_approval_algorithm()
